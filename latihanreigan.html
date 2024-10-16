@@ -93,6 +93,40 @@
       background-color: #f1f3f5;
     }
 
+    .action-btn {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .edit-btn,
+    .delete-btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .edit-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #218838;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
     /* Add some breathing room */
     table, input, select, button {
       margin-top: 10px;
@@ -111,7 +145,7 @@
       <option value="">Pilih Program Studi</option>
       <option value="Teknik Informatika">Teknik Informatika</option>
       <option value="Sistem Informasi">Sistem Informasi</option>
-      <option value="Manajemen Informatika">Manajemen Informatika</option>
+      <option value="Manajemen Informatika">Manajemen </option>
     </select>
     <button onclick="tambahData()">Tambah Data</button>
   </div>
@@ -122,6 +156,7 @@
         <th>NIM</th>
         <th>Nama</th>
         <th>Program Studi</th>
+        <th>Admin</th>
       </tr>
     </thead>
     <tbody>
@@ -160,6 +195,27 @@
       cellProdi.textContent = prodi;
       row.appendChild(cellProdi);
 
+      // Tambahkan kolom aksi (Edit dan Hapus)
+      const cellAction = document.createElement('td');
+      cellAction.classList.add('action-btn');
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'Edit';
+      editBtn.classList.add('edit-btn');
+      editBtn.onclick = function () {
+        editData(row);
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Hapus';
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.onclick = function () {
+        row.remove();
+      };
+
+      cellAction.appendChild(editBtn);
+      cellAction.appendChild(deleteBtn);
+      row.appendChild(cellAction);
+
       // Tambahkan baris baru ke tabel
       document.querySelector('#tabel-mahasiswa tbody').appendChild(row);
 
@@ -167,6 +223,21 @@
       document.getElementById('nim').value = '';
       document.getElementById('nama').value = '';
       document.getElementById('prodi').value = '';
+    }
+
+    function editData(row) {
+      // Ambil data yang ada di baris
+      const nim = row.children[0].textContent;
+      const nama = row.children[1].textContent;
+      const prodi = row.children[2].textContent;
+
+      // Masukkan ke dalam input form untuk diedit
+      document.getElementById('nim').value = nim;
+      document.getElementById('nama').value = nama;
+      document.getElementById('prodi').value = prodi;
+
+      // Hapus baris saat sedang edit
+      row.remove();
     }
   </script>
 
