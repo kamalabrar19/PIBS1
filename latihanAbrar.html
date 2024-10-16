@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Input Mahasiswa</title>
+  <title>Form Input Mahasiswa dengan Edit & Hapus</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,13 +17,12 @@
     }
 
     .form-container {
-      width: 500px;
+      width: 300px;
       margin: 0 auto;
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      
     }
 
     input, select, button {
@@ -61,6 +60,19 @@
       background-color: #4CAF50;
       color: white;
     }
+
+    .actions button {
+      background-color: #f44336;
+      margin: 0 5px;
+    }
+
+    .actions button.edit {
+      background-color: #ff9800;
+    }
+
+    .actions button:hover {
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
@@ -76,7 +88,7 @@
       <option value="Sistem Informasi">Sistem Informasi</option>
       <option value="Manajemen Informatika">Manajemen Informatika</option>
     </select>
-    <button onclick="tambahData()">Tambah</button>
+    <button id="submit-btn" onclick="tambahData()">Tambah</button>
   </div>
 
   <table id="tabel-mahasiswa">
@@ -85,6 +97,7 @@
         <th>NIM</th>
         <th>Nama</th>
         <th>Prodi</th>
+        <th>ADMIN</th>
       </tr>
     </thead>
     <tbody>
@@ -93,43 +106,68 @@
   </table>
 
   <script>
+    let editIndex = null; // Variabel untuk menyimpan index saat edit
+
     function tambahData() {
-      // Ambil nilai dari input
       const nim = document.getElementById('nim').value;
       const nama = document.getElementById('nama').value;
       const prodi = document.getElementById('prodi').value;
 
-      // Validasi input agar tidak kosong
       if (!nim || !nama || !prodi) {
         alert('Mohon isi semua field!');
         return;
       }
 
-      // Buat elemen <tr> baru
-      const row = document.createElement('tr');
+      if (editIndex === null) {
+        // Tambahkan data baru
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${nim}</td>
+          <td>${nama}</td>
+          <td>${prodi}</td>
+          <td class="actions">
+            <button class="edit" onclick="editData(this)">Edit</button>
+            <button onclick="hapusData(this)">Hapus</button>
+          </td>
+        `;
+        document.querySelector('#tabel-mahasiswa tbody').appendChild(row);
+      } else {
+        // Update data yang sedang diedit
+        const rows = document.querySelectorAll('#tabel-mahasiswa tbody tr');
+        rows[editIndex].cells[0].textContent = nim;
+        rows[editIndex].cells[1].textContent = nama;
+        rows[editIndex].cells[2].textContent = prodi;
+        editIndex = null; // Reset index edit setelah selesai
+        document.getElementById('submit-btn').textContent = 'Tambah';
+      }
 
-      // Tambahkan <td> untuk NIM
-      const cellNim = document.createElement('td');
-      cellNim.textContent = nim;
-      row.appendChild(cellNim);
+      resetForm();
+    }
 
-      // Tambahkan <td> untuk Nama
-      const cellNama = document.createElement('td');
-      cellNama.textContent = nama;
-      row.appendChild(cellNama);
-
-      // Tambahkan <td> untuk Prodi
-      const cellProdi = document.createElement('td');
-      cellProdi.textContent = prodi;
-      row.appendChild(cellProdi);
-
-      // Tambahkan baris baru ke tabel
-      document.querySelector('#tabel-mahasiswa tbody').appendChild(row);
-
-      // Reset input form
+    function resetForm() {
       document.getElementById('nim').value = '';
       document.getElementById('nama').value = '';
       document.getElementById('prodi').value = '';
+    }
+
+    function hapusData(button) {
+      const row = button.parentElement.parentElement;
+      document.querySelector('#tabel-mahasiswa tbody').removeChild(row);
+    }
+
+    function editData(button) {
+      const row = button.parentElement.parentElement;
+      const nim = row.cells[0].textContent;
+      const nama = row.cells[1].textContent;
+      const prodi = row.cells[2].textContent;
+
+      // Set nilai form dengan data yang dipilih untuk edit
+      document.getElementById('nim').value = nim;
+      document.getElementById('nama').value = nama;
+      document.getElementById('prodi').value = prodi;
+
+      editIndex = Array.from(row.parentElement.children).indexOf(row); // Simpan index baris yang sedang diedit
+      document.getElementById('submit-btn').textContent = 'Update';
     }
   </script>
 
