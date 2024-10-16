@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Input Mahasiswa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f5;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .form-container {
+      width: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Form Input Mahasiswa</h2>
+
+  <div class="form-container">
+    <input type="text" id="nim" placeholder="NIM" required>
+    <input type="text" id="nama" placeholder="Nama" required>
+    <select id="prodi" required>
+      <option value="">Pilih Prodi</option>
+      <option value="Teknik Informatika">Teknik Informatika</option>
+      <option value="Sistem Informasi">Sistem Informasi</option>
+      <option value="Manajemen Informatika">Manajemen Informatika</option>
+    </select>
+    <button onclick="tambahData()">Tambah</button>
+  </div>
+
+  <table id="tabel-mahasiswa">
+    <thead>
+      <tr>
+        <th>NIM</th>
+        <th>Nama</th>
+        <th>Prodi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data akan muncul di sini -->
+    </tbody>
+  </table>
+
+  <script>
+    function tambahData() {
+      // Ambil nilai dari input
+      const nim = document.getElementById('nim').value;
+      const nama = document.getElementById('nama').value;
+      const prodi = document.getElementById('prodi').value;
+
+      // Validasi input agar tidak kosong
+      if (!nim || !nama || !prodi) {
+        alert('Mohon isi semua field!');
+        return;
+      }
+
+      // Buat elemen <tr> baru
+      const row = document.createElement('tr');
+
+      // Tambahkan <td> untuk NIM
+      const cellNim = document.createElement('td');
+      cellNim.textContent = nim;
+      row.appendChild(cellNim);
+
+      // Tambahkan <td> untuk Nama
+      const cellNama = document.createElement('td');
+      cellNama.textContent = nama;
+      row.appendChild(cellNama);
+
+      // Tambahkan <td> untuk Prodi
+      const cellProdi = document.createElement('td');
+      cellProdi.textContent = prodi;
+      row.appendChild(cellProdi);
+
+      // Tambahkan baris baru ke tabel
+      document.querySelector('#tabel-mahasiswa tbody').appendChild(row);
+
+      // Reset input form
+      document.getElementById('nim').value = '';
+      document.getElementById('nama').value = '';
+      document.getElementById('prodi').value = '';
+    }
+  </script>
+
+</body>
+</html>
